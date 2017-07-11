@@ -73,6 +73,17 @@ class Chef
           :token => @token,
         }
 
+        if msg.length > 4000 then
+          params[:text] = msg.lines[0]
+          params[:attachments] = [
+            {
+              "fallback": msg,
+              "color": "#FF0000",
+              "text": msg,
+            }
+          ]
+        end
+
         uri = URI("https://#{@team}.slack.com/services/hooks/incoming-webhook?token=#{@token}")
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
